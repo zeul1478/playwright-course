@@ -2,8 +2,16 @@
 from playwright.sync_api import Page
 import pytest
 
-
-def test_practice_form(page: Page):
+@pytest.mark.parametrize(
+    "first , last , email",
+    [("James" , "Brown" , "jamesbrown@gmail.com") , 
+     ("Mike" , "Buzi" , "mihaibuzi@gmail.com") , 
+     ("Maria", "Garcia", "mariagarcia@yahoo.com"),
+     ("Wei", "Chen", "weichen@outlook.com"),
+     ("Aisha", "Patel", "aishapatel@proton.me"), 
+    ]
+)
+def test_practice_form(page: Page, first, last, email):
    
     page.goto("https://demoqa.com/automation-practice-form")
     first_name_field = page.get_by_role("textbox", name="First Name")
@@ -25,14 +33,14 @@ def test_practice_form(page: Page):
     modal_title = page.get_by_text("Thanks for submitting the form")
 
     
-    first_name_field.fill("Mihai")
+    first_name_field.fill(first)
     first_name_field.press("Tab")
-    last_name_field.fill("Buzila")
+    last_name_field.fill(last)
     last_name_field.press("Tab")
-    email_field.fill("mihaibuzila1478@gmail.com")
+    email_field.fill(email)
     gender_check_box.page.get_by_role("radio", name="Male", exact=True).check()
-    mobile_field.fill("3027276099")
-    date_of_birth.fill("10 Sep 1996")
+    mobile_field.fill("3026268099")
+    date_of_birth.fill("11 Sep 1994")
     subjects_field.nth(3).click()
     subjects_input.fill("m")
     page.get_by_role("option", name="Maths").click()
@@ -44,7 +52,7 @@ def test_practice_form(page: Page):
     assert check_box_reading.is_checked()
     assert check_box_music.is_checked()
     assert check_box_sports.is_checked()
-    picture_input.set_input_files("Tests/test_data/Screenshot 2026-07-09 at 9.49.27 PM.png")
+    picture_input.set_input_files("test_data/Screenshot 2026-07-09 at 9.49.27 PM.png")
     address_field.fill("1300 SE FL")
     state_dropdown.click()
     page.get_by_role("option", name="Haryana").click()
@@ -52,7 +60,7 @@ def test_practice_form(page: Page):
     page.get_by_role("option", name="Karnal").click()
     submit_button.click()
     assert modal_title.is_visible()
-    assert page.get_by_text("Mihai Buzila").is_visible()
+    assert page.get_by_text(f"{first} {last}").is_visible()
 
     
 
