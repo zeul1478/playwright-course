@@ -65,7 +65,7 @@ def test_hovers(page: Page):
 def test_upload(page: Page):
     page.goto("https://the-internet.herokuapp.com/upload")
     # locator of the input    path to the file
-    page.locator("#file-upload").set_input_files("Tests/test_data/resume.txt")
+    page.locator("#file-upload").set_input_files("test_data/resume.txt")
     page.locator("#file-submit").click()
     
 
@@ -85,27 +85,39 @@ def test_context_menu(page: Page) -> None:
 
 
 @pytest.mark.parametrize(
-    "link", 
-    
+    "link",
     [
-        "random_data.txt" , "sample.txt" , "sample.pdf"
+        "random_data.txt",           
+        "Sample.pdf"         
     ],
 )
 def test_download(page: Page, link: str) -> None:
     page.goto("https://the-internet.herokuapp.com/download")
     with page.expect_download() as download_info:
         page.get_by_role("link", name=link).click()
-    download = download_info.value 
-    assert link in str(download)
+    download = download_info.value
+    
+    assert download.suggested_filename == link
 
 
 
 def test_hidden_ad(page: Page) -> None:
-    page.goto("https://the-internet.herokuapp.com/context_menu")
+    page.goto("https://the-internet.herokuapp.com/entry_ad")
+    
+    # 1. Wait for the modal to appear
     modal = page.locator("#modal")
-    page.get_by_text("Close", exact=True).click()
+    modal.wait_for(state="visible", timeout=5000)  # Wait up to 5 seconds
+    
+    # 2. Assert it's visible
+    assert modal.is_visible()
+    
+    # 3. Click the close button (more specific locator)
+    page.locator(".modal-footer").get_by_text("Close").click()
+    
+    # 4. Wait for the modal to disappear
     modal.wait_for(state="hidden")
-
+    
+    # 5. Assert it's gone
     assert not modal.is_visible()
 
 
