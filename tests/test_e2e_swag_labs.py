@@ -5,7 +5,7 @@ from playwright.sync_api import Page, expect
     "username, password",
     [
         ("standard_user", "secret_sauce"),
-        pytest.param("problem_user", "secret_sauce", marks=pytest.mark.xfail(reason="problem_user is expected to fail at checkout")),
+        ("problem_user", "secret_sauce"),
         ("performance_glitch_user", "secret_sauce"),
     ]
 )
