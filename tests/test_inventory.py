@@ -38,5 +38,3 @@ def test_sort_dropdown_count(page: Page):
     inventory_page = login_page.login_standard_user()
 
     assert inventory_page.get_sort_option_count() == 4
-
-
