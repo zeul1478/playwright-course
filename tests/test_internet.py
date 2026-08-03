@@ -100,7 +100,7 @@ def test_context_menu(page: Page) -> None:
 @pytest.mark.parametrize(
     "link", 
     [
-        "random_data.txt", "sample.txt", "sample.pdf"    
+        "random_data.txt", "ExampleFile.txt", "test.txt" 
     ],             
 )
 def test_download(page: Page, link: str) -> None:
