@@ -17,11 +17,14 @@ allure-results/
 allure-report/
 test-results/
 report.html
-assets/
 
 # Local config
 .env
 
+# Saved login session — real cookies, never commit
+playwright/.auth/
+
 # OS
 .DS_Store
-
+tests/test_setup.py
+tests/test_first.py
