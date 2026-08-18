@@ -1,7 +1,9 @@
-
+import re
+import requests
 
 from api.booking_client import BookingAPIClient
 from api.builders import make_booking
+
 
 # Request
 # curl -X POST \
@@ -19,22 +21,13 @@ from api.builders import make_booking
 #     "additionalneeds" : "Breakfast"
 # }'
 
-
-
 def test_create_booking(booking_client: BookingAPIClient):
-    payload = make_booking()
+    payload= make_booking()
     response = booking_client.create_booking(payload)
- 
+
     assert response.status_code == 200
     assert response.json()["bookingid"] 
     assert response.json()["booking"] == payload
-
-def test_create_without_field(booking_client: BookingAPIClient):
-    payload = make_booking()
-    del payload["bookingdates"]
-    r = booking_client.create_booking(payload)
-    print(r.status_code)  # 400
-    assert r.status_code == 500
 
 # json={
 #     "key": "value",
@@ -48,6 +41,12 @@ def test_create_without_field(booking_client: BookingAPIClient):
 # json.values[0]
 # json["nest"]["key1"]
 
+def test_create_without_field(booking_client: BookingAPIClient):
+    payload = make_booking()
+    del payload["bookingdates"]
+    r = booking_client.create_booking(payload)
+    print(r.status_code) # 400
+    assert r.status_code == 500
 
 
 
