@@ -9,6 +9,7 @@ def test_login_credentials(login_page: LoginPage):
 
 
 def test_login_successful_one(login_page: LoginPage):
+    # login_standard_user() RETURNS the next page object. Use it.
     inventory_page = login_page.login_standard_user()
     assert inventory_page.get_title().text_content() == "Products"
 
@@ -27,6 +28,7 @@ def test_login_successful(login_page: LoginPage, username):
     assert inventory_page.get_title().text_content() == "Products"
 
 
+# Negative as well
 @pytest.mark.parametrize(
     "username, error",
     [
@@ -38,4 +40,5 @@ def test_login_fails(login_page: LoginPage, username, error):
     login_page.login_user(username, "secret_sauce")
 
     actual_error = login_page.get_error_message().text_content()
+    #    expected  vs  actual
     assert error in actual_error

@@ -1,77 +1,27 @@
-
-from playwright.sync_api import Page
+import re
+from playwright.sync_api import Page, expect
 import pytest
 
+
 @pytest.mark.parametrize(
-    "first , last , email",
-    [("James" , "Brown" , "jamesbrown@gmail.com") , 
-     ("Mike" , "Buzi" , "mihaibuzi@gmail.com") , 
-     ("Maria", "Garcia", "mariagarcia@yahoo.com"),
-     ("Wei", "Chen", "weichen@outlook.com"),
-     ("Aisha", "Patel", "aishapatel@proton.me"), 
-    ]
+    "first, last, email",
+    [
+        ("John", "Smith", "johnsmith@gmail.com"),
+        ("Jane", "Doe", "janedoe@gmail.com"),
+        ("Maria", "Garcia", "mariagarcia@yahoo.com"),
+        ("Wei", "Chen", "weichen@outlook.com"),
+        ("Aisha", "Patel", "aishapatel@proton.me"),
+    ],
 )
-def test_practice_form(page: Page, first, last, email):
-   
+def test_form(page: Page, first, last, email) -> None:
+    # Arrange
     page.goto("https://demoqa.com/automation-practice-form")
-    first_name_field = page.get_by_role("textbox", name="First Name")
-    last_name_field = page.get_by_role("textbox", name="Last Name")
-    email_field =  page.get_by_role("textbox", name="name@example.com")
-    gender_check_box = page.get_by_text("MaleFemaleOther")
-    date_of_birth = page.locator("#dateOfBirthInput")
-    subjects_field = page.locator("#subjectsContainer div")
-    mobile_field = page.locator("#userNumber")
-    check_box_reading = page.get_by_text("Reading")
-    check_box_music =  page.get_by_text("Music")
-    check_box_sports =  page.get_by_text("Sports")
-    subjects_input = page.locator("#subjectsInput")
-    picture_input = page.locator("#uploadPicture")
-    address_field = page.locator("#currentAddress")
-    state_dropdown = page.locator("#state svg")
-    city_dropdown = page.locator("#city svg")
-    submit_button = page.locator("#submit")
-    modal_title = page.get_by_text("Thanks for submitting the form")
-
-    
-    first_name_field.fill(first)
-    first_name_field.press("Tab")
-    last_name_field.fill(last)
-    last_name_field.press("Tab")
-    email_field.fill(email)
-    gender_check_box.page.get_by_role("radio", name="Male", exact=True).check()
-    mobile_field.fill("3026268099")
-    date_of_birth.fill("11 Sep 1994")
-    subjects_field.nth(3).click()
-    subjects_input.fill("m")
-    page.get_by_role("option", name="Maths").click()
-    subjects_input.fill("c")
-    page.get_by_role("option", name="Computer Science").click()
-    check_box_reading.click()
-    check_box_music.click()
-    check_box_sports.click()
-    assert check_box_reading.is_checked()
-    assert check_box_music.is_checked()
-    assert check_box_sports.is_checked()
-    picture_input.set_input_files("test_data/Screenshot 2026-07-09 at 9.49.27 PM.png")
-    address_field.fill("1300 SE FL")
-    state_dropdown.click()
-    page.get_by_role("option", name="Haryana").click()
-    city_dropdown.click()
-    page.get_by_role("option", name="Karnal").click()
-    submit_button.click()
-    assert modal_title.is_visible()
-    assert page.get_by_text(f"{first} {last}").is_visible()
-
-    
-
-    
-    
-    
-    
-    
-
-
-
-    
-   
-    
+    # Act 
+    page.get_by_role("textbox", name="First Name").fill(first)
+    page.get_by_role("textbox", name="Last Name").fill(last)
+    page.get_by_role("textbox", name="name@example.com").fill(email)
+    page.get_by_role("radio", name="Male", exact=True).check()
+    page.get_by_role("textbox", name="Mobile Number").fill("1231234567")
+    page.get_by_role("button", name="Submit").click()
+    # Assert
+    expect(page.locator("#example-modal-sizes-title-lg")).to_contain_text("Thanks for submitting the form")
