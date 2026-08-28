@@ -14,7 +14,9 @@ def test_deleted_booking_is_gone(booking_client, created_booking):
     assert booking_client.get_booking(booking_id).status_code == 404
     # gone means UNFINDABLE, not "the server said OK".
     # (the fixture's teardown will delete this id again — and must not mind.)
-
+    
+def test_delete_without_token():
+    pass
 
 def test_full_booking_lifecycle(booking_client):
     """Every verb of the block, one readable story. The interview classic."""
